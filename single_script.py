@@ -14,6 +14,7 @@ from google.oauth2 import service_account
 from google.cloud.speech_v1p1beta1 import LongRunningRecognizeRequest
 from google.cloud.speech_v1p1beta1 import RecognitionAudio
 from google.cloud.speech_v1p1beta1 import RecognitionConfig
+from googletrans import Translator
 
 BUCKET_NAME = "rec-audio1"
 DOWNLOADS_PATH = r"C:\Users\vamsa\Downloads"
@@ -26,7 +27,6 @@ def browse_file():
     audio_file_entry.insert(tk.END, filename)
 
 def start_transcription():
-    audio_location = audio_location_entry.get()
     audio_file_path = audio_file_entry.get()
     upload_blob(bucket_name=BUCKET_NAME, source_file_name=audio_file_path,credentials_file_path=CREDENTIALS_PATH)
     transcribe_hindi_audio_long_running(audio_file_path=audio_file_path, credentials_file_path=CREDENTIALS_PATH)
@@ -76,14 +76,15 @@ def transcribe_hindi_audio_long_running(audio_file_path=None, credentials_file_p
         for result in response.results:
             for alternative in result.alternatives:
                 print("{}\n".format(alternative.transcript))
+        for result in response.results:
+            for alternative in result.alternatives:
+                hindi_text = alternative.transcript
+                translation = translator.translate(hindi_text, src='hi', dest='en')
+                print(f"{translation.text}\n")
 
 
 if __name__ == "__main__":
     root = tk.Tk()
-    audio_location_label = tk.Label(root, text="Audio Location")
-    audio_location_label.pack()
-    audio_location_entry = tk.Entry(root)
-    audio_location_entry.pack()
     audio_file_label = tk.Label(root, text="Audio File")
     audio_file_label.pack()
     audio_file_entry = tk.Entry(root)
@@ -93,10 +94,3 @@ if __name__ == "__main__":
     start_button = tk.Button(root, text="Start Transcription", command=start_transcription)
     start_button.pack()
     root.mainloop()
-#     parser = argparse.ArgumentParser(description="Transcribe Hindi Audio")
-#     parser.add_argument("--audio_location",type=str, help="Path to Downloads directory", default=DOWNLOADS_PATH)
-#     parser.add_argument("--audio_file", type=str, help="Name of the audio file", default=None)
-#     parser.add_argument("--credentials_path", type=str, help="Path to credentials file", default=CREDENTIALS_PATH)
-#     args = parser.parse_args()
-#     upload_blob(bucket_name = BUCKET_NAME, source_file_name = args.audio_file_path, credentials_file_path=args.CREDENTIALS_PATH)
-#     transcribe_hindi_audio_long_running(audio_file_path=args.audio_file_path, credentials_file_path=args.CREDENTIALS_PATH)
