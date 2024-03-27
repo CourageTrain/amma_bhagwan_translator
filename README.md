@@ -5,7 +5,8 @@ Sample Results:
 
 GUI - Select the MP3 file to convert and click start transcription:
 
-![snapshot_2](https://github.com/CourageTrain/amma_bhagwan_translator/assets/79729617/49c0994d-bad2-492a-9a0c-adbd639261fe)
+![snapshot_4](https://github.com/CourageTrain/amma_bhagwan_translator/assets/79729617/ccf5fe48-ccfd-49f4-90ab-70d622ff758e)
+
 
 Snapshot of Output:
 
